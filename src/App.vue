@@ -65,6 +65,8 @@
             :fill="shape.fill"
             @dblclick="removeShape(shape)"
             @transformend="handleTransformEnd"
+            @mouseenter="setCursorPointer"
+            @mouseleave="setCursorDefault"
           >
           </v-circle>
           <v-rect
@@ -79,6 +81,8 @@
             :fill="shape.fill"
             @dblclick="removeShape(shape)"
             @transformend="handleTransformEnd"
+            @mouseenter="setCursorPointer"
+            @mouseleave="setCursorDefault"
           >
           </v-rect>
           <v-regular-polygon
@@ -93,6 +97,8 @@
             :fill="shape.fill"
             @dblclick="removeShape(shape)"
             @transformend="handleTransformEnd"
+            @mouseenter="setCursorPointer"
+            @mouseleave="setCursorDefault"
           >
           </v-regular-polygon>
           <v-regular-polygon
@@ -107,6 +113,8 @@
             :fill="shape.fill"
             @dblclick="removeShape(shape)"
             @transformend="handleTransformEnd"
+            @mouseenter="setCursorPointer"
+            @mouseleave="setCursorDefault"
           ></v-regular-polygon>
           <v-transformer ref="transformer" />
         </v-layer>
@@ -122,6 +130,7 @@ export default {
       selectedColor: "#000000",
       shapes: [],
       selectedShapeName: "",
+      cursorStyle: "default",
       configCanvas: {
         name: "canvas",
         width: window.innerWidth,
@@ -190,12 +199,13 @@ export default {
       };
       this.shapes.push(newShape);
       console.log(this.$refs.sideMenu.clientWidth);
+      document.body.style.cursor = "pointer";
     },
     // DELETE SHAPE
     removeShape(shape) {
       const index = this.shapes.indexOf(shape);
       this.shapes.splice(index, 1);
-      this.$refs.transformer.getNode().nodes([])
+      this.$refs.transformer.getNode().nodes([]);
     },
     // TRANSFORM SHAPE
     handleTransformEnd(e) {
@@ -261,6 +271,16 @@ export default {
       // Update the shape's fill property
       selectedShape.fill = newColor;
     },
+    // CURSOR CHANGE
+    setCursorPointer() {
+      document.body.style.cursor = "pointer";
+    },
+    setCursorCopy() {
+      document.body.style.cursor = "copy";
+    },
+    setCursorDefault() {
+      document.body.style.cursor = "default";
+    },
   },
   mounted() {
     this.configCanvas.width = this.$refs.canvas.clientWidth;
@@ -298,20 +318,22 @@ export default {
   flex-wrap: wrap;
   padding-top: 20px;
   justify-content: center;
+  gap: 20px;
 }
 
 #side-menu h2 {
   color: black;
   padding-top: 10px;
   font-size: 2em;
-  text-decoration: underline;
 }
 
-
 #shapes img {
-  width: 50px;
-  height: 50px;
-  padding: 8px;
+  width: 65px;
+  height: 65px;
+}
+
+#shapes img:hover {
+  cursor: pointer;
 }
 
 #color-picker {
