@@ -1,4 +1,5 @@
 # konva-vue
+Shape drag and drop application where you can change the color, resize, rotate, and delete(dblclick) the shapes. 
 
 ## Project setup
 ```

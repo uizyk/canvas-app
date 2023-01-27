@@ -46,12 +46,12 @@
         />
       </div>
     </section>
-    <section id="canvas" ref="canvas">
+    <section id="canvas" ref="canvas" @dragover="handleDragOver">
       <v-stage
         :config="configCanvas"
         @mousedown="handleStageMouseDown"
         @touchstart="handleStageMouseDown"
-        >`
+      >
         <v-layer ref="layer">
           <v-circle
             v-for="shape in filteredCircleShapes"
@@ -65,8 +65,8 @@
             :fill="shape.fill"
             @dblclick="removeShape(shape)"
             @transformend="handleTransformEnd"
-            @mouseenter="setCursorMove"
             @mouseleave="setCursorDefault"
+            @mouseenter="setCursorMove"
           >
           </v-circle>
           <v-rect
@@ -81,8 +81,8 @@
             :fill="shape.fill"
             @dblclick="removeShape(shape)"
             @transformend="handleTransformEnd"
-            @mouseenter="setCursorMove"
             @mouseleave="setCursorDefault"
+            @mouseenter="setCursorMove"
           >
           </v-rect>
           <v-regular-polygon
@@ -97,8 +97,8 @@
             :fill="shape.fill"
             @dblclick="removeShape(shape)"
             @transformend="handleTransformEnd"
-            @mouseenter="setCursorMove"
             @mouseleave="setCursorDefault"
+            @mouseenter="setCursorMove"
           >
           </v-regular-polygon>
           <v-regular-polygon
@@ -113,8 +113,8 @@
             :fill="shape.fill"
             @dblclick="removeShape(shape)"
             @transformend="handleTransformEnd"
-            @mouseenter="setCursorMove"
             @mouseleave="setCursorDefault"
+            @mouseenter="setCursorMove"
           ></v-regular-polygon>
           <v-transformer ref="transformer" />
         </v-layer>
@@ -184,9 +184,33 @@ export default {
     handleDragStart(e) {
       const shapeType = e.target.getAttribute("data-shape");
       this.currentShape = shapeType;
+      document.body.style.cursor = "move";
     },
+    handleDragOver(e) {
+      e.preventDefault();
+    },
+
     handleDrop(e) {
       e.preventDefault();
+      // Get the x and y coordinates of the mouse pointer
+      const x = e.clientX;
+      const y = e.clientY;
+
+      // Get the boundaries of your side menu element
+
+      const sideMenuRect = this.$refs.sideMenu.getBoundingClientRect();
+
+      // Check if the drop location is within the side menu boundaries
+      if (
+        x >= sideMenuRect.left &&
+        x <= sideMenuRect.right &&
+        y >= sideMenuRect.top &&
+        y <= sideMenuRect.bottom
+      ) {
+        // The drop location is within the side menu, so cancel the drop
+        return;
+      }
+
       const newShape = {
         name: Date.now().toString(),
         id: Date.now(),
@@ -198,14 +222,13 @@ export default {
         type: this.currentShape,
       };
       this.shapes.push(newShape);
-      console.log(this.$refs.sideMenu.clientWidth);
-      document.body.style.cursor = "pointer";
     },
     // DELETE SHAPE
     removeShape(shape) {
       const index = this.shapes.indexOf(shape);
       this.shapes.splice(index, 1);
       this.$refs.transformer.getNode().nodes([]);
+      this.selectedShapeName = "";
     },
     // TRANSFORM SHAPE
     handleTransformEnd(e) {
@@ -241,7 +264,6 @@ export default {
         this.selectedShapeName = "";
       }
       this.updateTransformer();
-      console.log(e.target.name());
     },
     updateTransformer() {
       // here we need to manually attach or detach Transformer node
@@ -293,6 +315,7 @@ export default {
 * {
   margin: 0;
   padding: 0;
+  caret-color: transparent;
 }
 
 #container {
@@ -341,6 +364,7 @@ export default {
   flex-direction: column;
   align-items: center;
   padding-top: 30px;
+  gap: 8px;
 }
 
 #color-picker p {
