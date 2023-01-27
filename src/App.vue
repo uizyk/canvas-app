@@ -65,7 +65,7 @@
             :fill="shape.fill"
             @dblclick="removeShape(shape)"
             @transformend="handleTransformEnd"
-            @mouseenter="setCursorPointer"
+            @mouseenter="setCursorMove"
             @mouseleave="setCursorDefault"
           >
           </v-circle>
@@ -81,7 +81,7 @@
             :fill="shape.fill"
             @dblclick="removeShape(shape)"
             @transformend="handleTransformEnd"
-            @mouseenter="setCursorPointer"
+            @mouseenter="setCursorMove"
             @mouseleave="setCursorDefault"
           >
           </v-rect>
@@ -97,7 +97,7 @@
             :fill="shape.fill"
             @dblclick="removeShape(shape)"
             @transformend="handleTransformEnd"
-            @mouseenter="setCursorPointer"
+            @mouseenter="setCursorMove"
             @mouseleave="setCursorDefault"
           >
           </v-regular-polygon>
@@ -113,7 +113,7 @@
             :fill="shape.fill"
             @dblclick="removeShape(shape)"
             @transformend="handleTransformEnd"
-            @mouseenter="setCursorPointer"
+            @mouseenter="setCursorMove"
             @mouseleave="setCursorDefault"
           ></v-regular-polygon>
           <v-transformer ref="transformer" />
@@ -275,8 +275,8 @@ export default {
     setCursorPointer() {
       document.body.style.cursor = "pointer";
     },
-    setCursorCopy() {
-      document.body.style.cursor = "copy";
+    setCursorMove() {
+      document.body.style.cursor = "move";
     },
     setCursorDefault() {
       document.body.style.cursor = "default";
