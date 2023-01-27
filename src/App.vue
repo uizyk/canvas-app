@@ -195,6 +195,7 @@ export default {
     removeShape(shape) {
       const index = this.shapes.indexOf(shape);
       this.shapes.splice(index, 1);
+      this.$refs.transformer.getNode().nodes([])
     },
     // TRANSFORM SHAPE
     handleTransformEnd(e) {
