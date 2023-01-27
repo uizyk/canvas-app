@@ -277,16 +277,18 @@ export default {
 
 #container {
   display: flex;
+  max-height: 100vh;
+  max-width: 100vw;
 }
 
 #side-menu {
   /* min-width: 30vw; */
-  background-color: rgb(243, 225, 255);
+  background-color: rgb(248, 242, 252);
   position: absolute;
   z-index: 10;
   display: flex;
   flex-direction: column;
-  width: 10vw;
+  width: 12vw;
   height: 100vh;
   align-items: center;
 }
