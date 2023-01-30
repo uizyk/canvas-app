@@ -51,6 +51,7 @@
         :config="configCanvas"
         @mousedown="handleStageMouseDown"
         @touchstart="handleStageMouseDown"
+        @dragstart="setZIndex"
       >
         <v-layer ref="layer">
           <v-circle
@@ -83,6 +84,7 @@
             @transformend="handleTransformEnd"
             @mouseleave="setCursorDefault"
             @mouseenter="setCursorMove"
+
           >
           </v-rect>
           <v-regular-polygon
@@ -115,6 +117,7 @@
             @transformend="handleTransformEnd"
             @mouseleave="setCursorDefault"
             @mouseenter="setCursorMove"
+
           ></v-regular-polygon>
           <v-transformer ref="transformer" />
         </v-layer>
@@ -123,7 +126,9 @@
   </div>
 </template>
 
+
 <script>
+
 export default {
   data() {
     return {
@@ -220,6 +225,7 @@ export default {
         scaleY: 1,
         fill: "dodgerblue",
         type: this.currentShape,
+        zIndex: 0
       };
       this.shapes.push(newShape);
     },
@@ -230,17 +236,18 @@ export default {
       this.$refs.transformer.getNode().nodes([]);
       this.selectedShapeName = "";
     },
+
     // TRANSFORM SHAPE
     handleTransformEnd(e) {
       const shape = this.shapes.find(
         (shape) => shape.name === this.selectedShapeName
       );
-
       shape.x = e.target.x();
       shape.y = e.target.y();
       shape.rotation = e.target.rotation();
       shape.scaleX = e.target.scaleX();
       shape.scaleY = e.target.scaleY();
+      shape.zIndex + 10;
     },
     handleStageMouseDown(e) {
       // clicked on stage - clear selection
@@ -303,6 +310,16 @@ export default {
     setCursorDefault() {
       document.body.style.cursor = "default";
     },
+
+    // Change ZIndex
+
+    setZIndex(e){
+      console.log(this.$refs.layer.getNode())
+        e.target.moveToTop();
+        this.$refs.transformer.getNode().moveToTop();
+    },
+    
+
   },
   mounted() {
     this.configCanvas.width = this.$refs.canvas.clientWidth;
@@ -325,7 +342,7 @@ export default {
 }
 
 #side-menu {
-  /* min-width: 30vw; */
+  min-width: 106px;
   background-color: rgb(248, 242, 252);
   position: absolute;
   z-index: 10;
