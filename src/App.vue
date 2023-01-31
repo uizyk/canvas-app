@@ -376,6 +376,6 @@ export default {
 @font-face {
   font-family: "Itim";
   src: local("Itim"),
-   url(../src/assets/fonts/Itim-Regular.ttf) format("truetype");
+    url(../src/assets/fonts/Itim-Regular.ttf) format("truetype");
 }
 </style>

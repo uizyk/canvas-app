@@ -1,5 +1,5 @@
 * {
-  font-family:'Itim', Courier, monospace;
+  font-family: "Itim", Courier, monospace;
   margin: 0;
   padding: 0;
   caret-color: transparent;
@@ -38,7 +38,7 @@
   color: black;
   padding-top: 10px;
   font-size: 2em;
-  padding-bottom: 5px;
+  padding: 15px 0 5px 0;
 }
 
 button {
