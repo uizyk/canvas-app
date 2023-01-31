@@ -14,7 +14,7 @@
         :class="{ 'side-menu': true, 'side-menu--open': isOpen }"
         v-if="isOpen"
       >
-        <h2>Shapes</h2>
+        <h2>S H A P E S</h2>
         <div id="shapes">
           <img
             id="imgCircle"
@@ -58,7 +58,13 @@
             @input="handleColorChange"
           />
         </div>
-        <button v-if="shapes.length !== 0" @click="downloadImage" id="download-canvas">Download Canvas</button>
+        <button
+          v-if="shapes.length !== 0"
+          @click="downloadImage"
+          id="download-canvas"
+        >
+          Download Canvas
+        </button>
         <button class="arrow-container" @click="toggleSideMenu">
           <i class="fa-solid fa-arrow-left-long"></i>
         </button>
@@ -148,7 +154,7 @@ export default {
   data() {
     return {
       isOpen: true,
-      selectedColor: "#000000",
+      selectedColor: "#D9C1FF",
       shapes: [],
       selectedShapeName: "",
       cursorStyle: "default",
@@ -243,7 +249,7 @@ export default {
         y: e.clientY,
         scaleX: 1,
         scaleY: 1,
-        fill: "dodgerblue",
+        fill: "rgb(217, 193, 255)",
         type: this.currentShape,
         zIndex: 0,
       };
@@ -355,7 +361,7 @@ export default {
         const dataURL = this.$refs.stage.getStage().toDataURL({
           pixelRatio: 3,
         });
-        this.downloadURI.bind(this)(dataURL, "stage.png");
+        this.downloadURI.bind(this)(dataURL, "canvas.png");
       });
     },
   },
@@ -365,3 +371,11 @@ export default {
   },
 };
 </script>
+
+<style>
+@font-face {
+  font-family: "Itim";
+  src: local("Itim"),
+   url(../src/assets/fonts/Itim-Regular.ttf) format("truetype");
+}
+</style>
