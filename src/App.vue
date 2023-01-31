@@ -1,51 +1,68 @@
 <template>
   <div id="container">
-    <section id="side-menu" ref="sideMenu">
-      <h2>Shapes</h2>
-      <div id="shapes">
-        <img
-          id="imgCircle"
-          src="./assets/shapes/circle.svg"
-          draggable="true"
-          data-shape="circle"
-          @dragstart="handleDragStart"
-          @dragend="handleDrop"
-        />
-        <img
-          id="imgSquare"
-          src="./assets/shapes/square.svg"
-          draggable="true"
-          data-shape="square"
-          @dragstart="handleDragStart"
-          @dragend="handleDrop"
-        />
-        <img
-          id="imgHexagon"
-          src="./assets/shapes/hexagon.svg"
-          draggable="true"
-          data-shape="hexagon"
-          @dragstart="handleDragStart"
-          @dragend="handleDrop"
-        />
-        <img
-          id="imgTriangle"
-          src="./assets/shapes/triangle.svg"
-          draggable="true"
-          data-shape="triangle"
-          @dragstart="handleDragStart"
-          @dragend="handleDrop"
-        />
-      </div>
-      <div id="color-picker">
-        <p v-if="selectedShapeName !== ''" type="color">Change Color</p>
-        <input
-          v-if="selectedShapeName !== ''"
-          type="color"
-          v-model="selectedColor"
-          @input="handleColorChange"
-        />
-      </div>
-    </section>
+    <button
+      class="arrow-container open-button"
+      @click="toggleSideMenu"
+      v-if="!isOpen"
+    >
+      <i class="fa-solid fa-arrow-right-long"></i>
+    </button>
+    <transition name="side-menu-close">
+      <section
+        id="side-menu"
+        ref="sideMenu"
+        :class="{ 'side-menu': true, 'side-menu--open': isOpen }"
+        v-if="isOpen"
+      >
+        <h2>Shapes</h2>
+        <div id="shapes">
+          <img
+            id="imgCircle"
+            src="./assets/shapes/circle.svg"
+            draggable="true"
+            data-shape="circle"
+            @dragstart="handleDragStart"
+            @dragend="handleDrop"
+          />
+          <img
+            id="imgSquare"
+            src="./assets/shapes/square.svg"
+            draggable="true"
+            data-shape="square"
+            @dragstart="handleDragStart"
+            @dragend="handleDrop"
+          />
+          <img
+            id="imgHexagon"
+            src="./assets/shapes/hexagon.svg"
+            draggable="true"
+            data-shape="hexagon"
+            @dragstart="handleDragStart"
+            @dragend="handleDrop"
+          />
+          <img
+            id="imgTriangle"
+            src="./assets/shapes/triangle.svg"
+            draggable="true"
+            data-shape="triangle"
+            @dragstart="handleDragStart"
+            @dragend="handleDrop"
+          />
+        </div>
+        <div id="color-picker">
+          <p v-if="selectedShapeName !== ''" type="color">Change Color</p>
+          <input
+            v-if="selectedShapeName !== ''"
+            type="color"
+            v-model="selectedColor"
+            @input="handleColorChange"
+          />
+        </div>
+        <button class="arrow-container" @click="toggleSideMenu">
+          <i class="fa-solid fa-arrow-left-long"></i>
+        </button>
+      </section>
+    </transition>
     <section id="canvas" ref="canvas" @dragover="handleDragOver">
       <v-stage
         :config="configCanvas"
@@ -84,7 +101,6 @@
             @transformend="handleTransformEnd"
             @mouseleave="setCursorDefault"
             @mouseenter="setCursorMove"
-
           >
           </v-rect>
           <v-regular-polygon
@@ -117,7 +133,6 @@
             @transformend="handleTransformEnd"
             @mouseleave="setCursorDefault"
             @mouseenter="setCursorMove"
-
           ></v-regular-polygon>
           <v-transformer ref="transformer" />
         </v-layer>
@@ -126,12 +141,11 @@
   </div>
 </template>
 
-
 <script>
-
 export default {
   data() {
     return {
+      isOpen: true,
       selectedColor: "#000000",
       shapes: [],
       selectedShapeName: "",
@@ -185,6 +199,10 @@ export default {
     },
   },
   methods: {
+    // SIDE MENU TOGGLE
+    toggleSideMenu() {
+      this.isOpen = !this.isOpen;
+    },
     // ADD SHAPE
     handleDragStart(e) {
       const shapeType = e.target.getAttribute("data-shape");
@@ -225,7 +243,7 @@ export default {
         scaleY: 1,
         fill: "dodgerblue",
         type: this.currentShape,
-        zIndex: 0
+        zIndex: 0,
       };
       this.shapes.push(newShape);
     },
@@ -313,13 +331,11 @@ export default {
 
     // Change ZIndex
 
-    setZIndex(e){
-      console.log(this.$refs.layer.getNode())
-        e.target.moveToTop();
-        this.$refs.transformer.getNode().moveToTop();
+    setZIndex(e) {
+      console.log(this.$refs.layer.getNode());
+      e.target.moveToTop();
+      this.$refs.transformer.getNode().moveToTop();
     },
-    
-
   },
   mounted() {
     this.configCanvas.width = this.$refs.canvas.clientWidth;
@@ -339,12 +355,14 @@ export default {
   display: flex;
   max-height: 100vh;
   max-width: 100vw;
+  position: relative;
 }
+
+/* SIDE MENU */
 
 #side-menu {
   min-width: 106px;
   background-color: rgb(248, 242, 252);
-  position: absolute;
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -367,6 +385,10 @@ export default {
   font-size: 2em;
 }
 
+button {
+  cursor: pointer;
+}
+
 #shapes img {
   width: 65px;
   height: 65px;
@@ -386,5 +408,49 @@ export default {
 
 #color-picker p {
   color: black;
+}
+.arrow-container {
+  width: 90px;
+  height: 30px;
+  border: none;
+  background-color: rgb(234, 221, 243);
+  border-radius: 4px;
+  margin-top: 30px;
+}
+
+.arrow-container i {
+  font-size: 1.2em;
+}
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 300px;
+  background-color: #fff;
+  z-index: 100;
+}
+
+.open-button {
+  position: absolute;
+  z-index: 2;
+  margin-left: 30px;
+}
+
+/* SIDE MENU ANIMATION */
+.side-menu--open {
+  transform: translateX(0);
+  transition: transform 0.3s ease-in-out;
+}
+
+.side-menu-close-enter-active,
+.side-menu-close-leave-active {
+  transition: all 0.3s ease;
+}
+
+.side-menu-close-enter,
+.side-menu-close-leave-to {
+  transform: translateX(-100%);
 }
 </style>
