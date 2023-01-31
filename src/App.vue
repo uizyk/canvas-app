@@ -58,6 +58,7 @@
             @input="handleColorChange"
           />
         </div>
+        <button v-if="shapes.length !== 0" @click="downloadImage" id="download-canvas">Download Canvas</button>
         <button class="arrow-container" @click="toggleSideMenu">
           <i class="fa-solid fa-arrow-left-long"></i>
         </button>
@@ -69,6 +70,7 @@
         @mousedown="handleStageMouseDown"
         @touchstart="handleStageMouseDown"
         @dragstart="setZIndex"
+        ref="stage"
       >
         <v-layer ref="layer">
           <v-circle
@@ -253,7 +255,7 @@ export default {
       this.shapes.splice(index, 1);
       this.$refs.transformer.getNode().nodes([]);
       this.selectedShapeName = "";
-      this.setCursorDefault;
+      document.body.style.cursor = "default";
     },
 
     // TRANSFORM SHAPE
@@ -337,6 +339,25 @@ export default {
       e.target.moveToTop();
       this.$refs.transformer.getNode().moveToTop();
     },
+
+    // DOWNLOAD CANVAS
+
+    downloadURI(uri, name) {
+      let link = document.createElement("a");
+      link.download = name;
+      link.href = uri;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
+    downloadImage() {
+      this.$nextTick(() => {
+        const dataURL = this.$refs.stage.getStage().toDataURL({
+          pixelRatio: 3,
+        });
+        this.downloadURI.bind(this)(dataURL, "stage.png");
+      });
+    },
   },
   mounted() {
     this.configCanvas.width = this.$refs.canvas.clientWidth;
@@ -344,114 +365,3 @@ export default {
   },
 };
 </script>
-
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  caret-color: transparent;
-}
-
-#container {
-  display: flex;
-  max-height: 100vh;
-  max-width: 100vw;
-  position: relative;
-}
-
-/* SIDE MENU */
-
-#side-menu {
-  min-width: 106px;
-  background-color: rgb(248, 242, 252);
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  width: 12vw;
-  height: 100vh;
-  align-items: center;
-}
-
-#side-menu #shapes {
-  display: flex;
-  flex-wrap: wrap;
-  padding-top: 20px;
-  justify-content: center;
-  gap: 20px;
-}
-
-#side-menu h2 {
-  color: black;
-  padding-top: 10px;
-  font-size: 2em;
-}
-
-button {
-  cursor: pointer;
-}
-
-#shapes img {
-  width: 65px;
-  height: 65px;
-}
-
-#shapes img:hover {
-  cursor: pointer;
-}
-
-#color-picker {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 30px;
-  gap: 8px;
-}
-
-#color-picker p {
-  color: black;
-}
-.arrow-container {
-  width: 90px;
-  height: 30px;
-  border: none;
-  background-color: rgb(234, 221, 243);
-  border-radius: 4px;
-  margin-top: 30px;
-}
-
-.arrow-container i {
-  font-size: 1.2em;
-}
-
-.side-menu {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 300px;
-  background-color: #fff;
-  z-index: 100;
-}
-
-.open-button {
-  position: absolute;
-  z-index: 2;
-  margin-left: 30px;
-}
-
-/* SIDE MENU ANIMATION */
-.side-menu--open {
-  transform: translateX(0);
-  transition: transform 0.3s ease-in-out;
-}
-
-.side-menu-close-enter-active,
-.side-menu-close-leave-active {
-  transition: all 0.3s ease;
-}
-
-.side-menu-close-enter,
-.side-menu-close-leave-to {
-  transform: translateX(-100%);
-}
-</style>
