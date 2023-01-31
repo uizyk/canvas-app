@@ -253,6 +253,7 @@ export default {
       this.shapes.splice(index, 1);
       this.$refs.transformer.getNode().nodes([]);
       this.selectedShapeName = "";
+      this.setCursorDefault;
     },
 
     // TRANSFORM SHAPE
