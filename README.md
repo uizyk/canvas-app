@@ -1,5 +1,7 @@
 Shapes App
  - This is a web application that allows users to create and manipulate shapes on a canvas. The application supports four shapes: circle, square, hexagon, and triangle. Users can drag and drop these shapes onto the canvas, resize them, and change their colors.
+ 
+ - Brave shield may cause bugs
 
 Installation
  - To run the app, clone this repository and run npm install to install the necessary dependencies. Then, run npm run serve to start the app on a local server.
